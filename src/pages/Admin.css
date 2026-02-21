@@ -206,3 +206,103 @@
 .auth-box .btn-primary {
   margin-bottom: 16px;
 }
+
+/* Employee Management */
+.employee-management {
+  background: var(--surface);
+  border-radius: var(--border-radius);
+  padding: 24px;
+  margin-bottom: 24px;
+  box-shadow: var(--shadow);
+}
+
+.employee-management h2 {
+  margin-bottom: 16px;
+  font-size: 18px;
+}
+
+.add-employee {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.add-employee input {
+  flex: 1;
+  padding: 12px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  font-size: 14px;
+}
+
+.employee-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.employee-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px;
+  background: var(--background);
+  border-radius: 8px;
+}
+
+.btn-small {
+  padding: 6px 12px;
+  font-size: 12px;
+}
+
+/* Employee Management */
+.employee-management {
+  background: var(--surface);
+  border-radius: var(--border-radius);
+  padding: 24px;
+  margin-bottom: 24px;
+  box-shadow: var(--shadow);
+}
+
+.employee-management h2 {
+  margin-bottom: 16px;
+}
+
+.add-employee {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+.add-employee input {
+  flex: 1;
+  padding: 12px 16px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  font-size: 14px;
+}
+
+.add-employee input:focus {
+  outline: none;
+  border-color: var(--primary);
+}
+
+.employee-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.employee-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 16px;
+  background: var(--background);
+  border-radius: 8px;
+}
+
+.btn-small {
+  padding: 6px 12px;
+  font-size: 12px;
+}

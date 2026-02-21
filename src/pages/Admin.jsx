@@ -1,6 +1,6 @@
 import { useState, useMemo } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { getAppData, resetToDemoData } from '../utils/storage'
+import { getAppData, resetToDemoData, addEmployee, deleteEmployee } from '../utils/storage'
 import './Admin.css'
 
 function Admin() {
@@ -9,6 +9,8 @@ function Admin() {
   const [filter, setFilter] = useState('week')
   const [viewDate, setViewDate] = useState(new Date('2026-02-21'))
   const [showCalendar, setShowCalendar] = useState(false)
+  const [newEmployeeName, setNewEmployeeName] = useState('')
+  const [showEmployees, setShowEmployees] = useState(false)
 
   const navigate = useNavigate()
 
@@ -19,6 +21,19 @@ function Admin() {
     } else {
       setPin('')
       alert('Invalid PIN')
+    }
+  }
+
+  const handleAddEmployee = () => {
+    if (newEmployeeName.trim()) {
+      addEmployee(newEmployeeName)
+      setNewEmployeeName('')
+    }
+  }
+
+  const handleDeleteEmployee = (id) => {
+    if (confirm('Delete this employee? Time entries will be preserved but show as "Unknown".')) {
+      deleteEmployee(id)
     }
   }
 
@@ -196,6 +211,9 @@ function Admin() {
       </div>
 
       <div className="admin-actions">
+        <button className="btn-secondary" onClick={() => setShowEmployees(!showEmployees)}>
+          {showEmployees ? 'Hide Employees' : 'Manage Employees'}
+        </button>
         <button className="btn-secondary" onClick={() => setShowCalendar(!showCalendar)}>
           {showCalendar ? 'Show Table' : 'Show Calendar'}
         </button>
@@ -206,6 +224,37 @@ function Admin() {
           Reset Demo Data
         </button>
       </div>
+
+      {showEmployees && (
+        <div className="employee-management">
+          <h2>Manage Employees</h2>
+          <div className="add-employee">
+            <input
+              type="text"
+              value={newEmployeeName}
+              onChange={e => setNewEmployeeName(e.target.value)}
+              placeholder="Employee name"
+              onKeyDown={e => e.key === 'Enter' && handleAddEmployee()}
+            />
+            <button className="btn-primary" onClick={handleAddEmployee}>
+              Add
+            </button>
+          </div>
+          <div className="employee-list">
+            {employees.map(emp => (
+              <div key={emp.id} className="employee-item">
+                <span>{emp.name}</span>
+                <button
+                  className="btn-danger btn-small"
+                  onClick={() => handleDeleteEmployee(emp.id)}
+                >
+                  Delete
+                </button>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
 
       {!showCalendar ? (
         <div className="summary-table">

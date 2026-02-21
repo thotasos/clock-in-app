@@ -47,6 +47,23 @@ export function getActiveEntry(employeeId) {
   )
 }
 
+export function addEmployee(name) {
+  const data = getAppData()
+  const newEmployee = {
+    id: generateId(),
+    name: name.trim(),
+  }
+  data.employees.push(newEmployee)
+  saveAppData(data)
+  return newEmployee
+}
+
+export function deleteEmployee(id) {
+  const data = getAppData()
+  data.employees = data.employees.filter(e => e.id !== id)
+  saveAppData(data)
+}
+
 export function generateId() {
   return Date.now().toString(36) + Math.random().toString(36).substr(2)
 }
