@@ -1,4 +1,5 @@
 const STORAGE_KEY = 'timesheet-app-data'
+const THEME_KEY = 'timesheet-app-theme'
 
 const defaultData = {
   employees: [
@@ -72,6 +73,20 @@ export function resetToDemoData() {
   const data = getAppData()
   data.timeEntries = generateDemoData()
   saveAppData(data)
+}
+
+export function getTheme() {
+  return localStorage.getItem(THEME_KEY) || 'light'
+}
+
+export function setTheme(theme) {
+  localStorage.setItem(THEME_KEY, theme)
+  document.documentElement.setAttribute('data-theme', theme)
+}
+
+export function initializeTheme() {
+  const theme = getTheme()
+  document.documentElement.setAttribute('data-theme', theme)
 }
 
 function generateDemoData() {

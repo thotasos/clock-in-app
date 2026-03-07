@@ -1,6 +1,6 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { getAppData, updateTimeEntry, getActiveEntry } from '../utils/storage'
+import { getAppData, updateTimeEntry, getActiveEntry, getTheme, setTheme } from '../utils/storage'
 import EmployeeCard from '../components/EmployeeCard'
 import './CheckOut.css'
 
@@ -8,7 +8,18 @@ function CheckOut() {
   const [selectedId, setSelectedId] = useState(null)
   const [success, setSuccess] = useState(null)
   const [warning, setWarning] = useState(null)
+  const [theme, setThemeState] = useState('light')
   const navigate = useNavigate()
+
+  useEffect(() => {
+    setThemeState(getTheme())
+  }, [])
+
+  const toggleTheme = () => {
+    const newTheme = theme === 'light' ? 'dark' : 'light'
+    setTheme(newTheme)
+    setThemeState(newTheme)
+  }
 
   const employees = getAppData().employees
 
@@ -69,8 +80,15 @@ function CheckOut() {
   return (
     <div className="page">
       <header className="page-header">
-        <h1>Check Out</h1>
-        <p>Select your name to clock out</p>
+        <div className="header-top">
+          <div>
+            <h1>Check Out</h1>
+            <p>Select your name to clock out</p>
+          </div>
+          <button className="theme-toggle" onClick={toggleTheme} aria-label="Toggle theme">
+            {theme === 'light' ? '🌙' : '☀️'}
+          </button>
+        </div>
       </header>
 
       <div className="employee-grid">

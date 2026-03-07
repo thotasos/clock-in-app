@@ -1,6 +1,6 @@
-import { useState, useMemo } from 'react'
+import { useState, useMemo, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { getAppData, resetToDemoData, addEmployee, deleteEmployee } from '../utils/storage'
+import { getAppData, resetToDemoData, addEmployee, deleteEmployee, getTheme, setTheme } from '../utils/storage'
 import './Admin.css'
 
 function Admin() {
@@ -11,8 +11,19 @@ function Admin() {
   const [showCalendar, setShowCalendar] = useState(false)
   const [newEmployeeName, setNewEmployeeName] = useState('')
   const [showEmployees, setShowEmployees] = useState(false)
+  const [theme, setThemeState] = useState('light')
 
   const navigate = useNavigate()
+
+  useEffect(() => {
+    setThemeState(getTheme())
+  }, [])
+
+  const toggleTheme = () => {
+    const newTheme = theme === 'light' ? 'dark' : 'light'
+    setTheme(newTheme)
+    setThemeState(newTheme)
+  }
 
   const handlePinSubmit = () => {
     const data = getAppData()
@@ -175,10 +186,17 @@ function Admin() {
   return (
     <div className="page admin-page">
       <header className="page-header">
-        <h1>Admin Dashboard</h1>
-        <button className="btn-secondary" onClick={() => setAuthenticated(false)}>
-          Lock
-        </button>
+        <div className="header-top">
+          <h1>Admin Dashboard</h1>
+          <div className="header-actions">
+            <button className="theme-toggle" onClick={toggleTheme} aria-label="Toggle theme">
+              {theme === 'light' ? '🌙' : '☀️'}
+            </button>
+            <button className="btn-secondary" onClick={() => setAuthenticated(false)}>
+              Lock
+            </button>
+          </div>
+        </div>
       </header>
 
       <div className="filters">
