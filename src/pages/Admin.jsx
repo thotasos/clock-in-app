@@ -7,7 +7,7 @@ function Admin() {
   const [authenticated, setAuthenticated] = useState(false)
   const [pin, setPin] = useState('')
   const [filter, setFilter] = useState('week')
-  const [viewDate, setViewDate] = useState(new Date('2026-02-21'))
+  const [viewDate, setViewDate] = useState(new Date())
   const [showCalendar, setShowCalendar] = useState(false)
   const [newEmployeeName, setNewEmployeeName] = useState('')
   const [showEmployees, setShowEmployees] = useState(false)
