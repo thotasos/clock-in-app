@@ -1,16 +1,29 @@
-import { useState, useMemo } from 'react'
+import { useState, useMemo, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { getAppData, resetToDemoData } from '../utils/storage'
+import { getAppData, resetToDemoData, addEmployee, deleteEmployee, getTheme, setTheme } from '../utils/storage'
 import './Admin.css'
 
 function Admin() {
   const [authenticated, setAuthenticated] = useState(false)
   const [pin, setPin] = useState('')
   const [filter, setFilter] = useState('week')
-  const [viewDate, setViewDate] = useState(new Date('2026-02-21'))
+  const [viewDate, setViewDate] = useState(new Date())
   const [showCalendar, setShowCalendar] = useState(false)
+  const [newEmployeeName, setNewEmployeeName] = useState('')
+  const [showEmployees, setShowEmployees] = useState(false)
+  const [theme, setThemeState] = useState('light')
 
   const navigate = useNavigate()
+
+  useEffect(() => {
+    setThemeState(getTheme())
+  }, [])
+
+  const toggleTheme = () => {
+    const newTheme = theme === 'light' ? 'dark' : 'light'
+    setTheme(newTheme)
+    setThemeState(newTheme)
+  }
 
   const handlePinSubmit = () => {
     const data = getAppData()
@@ -19,6 +32,19 @@ function Admin() {
     } else {
       setPin('')
       alert('Invalid PIN')
+    }
+  }
+
+  const handleAddEmployee = () => {
+    if (newEmployeeName.trim()) {
+      addEmployee(newEmployeeName)
+      setNewEmployeeName('')
+    }
+  }
+
+  const handleDeleteEmployee = (id) => {
+    if (confirm('Delete this employee? Time entries will be preserved but show as "Unknown".')) {
+      deleteEmployee(id)
     }
   }
 
@@ -160,10 +186,17 @@ function Admin() {
   return (
     <div className="page admin-page">
       <header className="page-header">
-        <h1>Admin Dashboard</h1>
-        <button className="btn-secondary" onClick={() => setAuthenticated(false)}>
-          Lock
-        </button>
+        <div className="header-top">
+          <h1>Admin Dashboard</h1>
+          <div className="header-actions">
+            <button className="theme-toggle" onClick={toggleTheme} aria-label="Toggle theme">
+              {theme === 'light' ? '🌙' : '☀️'}
+            </button>
+            <button className="btn-secondary" onClick={() => setAuthenticated(false)}>
+              Lock
+            </button>
+          </div>
+        </div>
       </header>
 
       <div className="filters">
@@ -196,6 +229,9 @@ function Admin() {
       </div>
 
       <div className="admin-actions">
+        <button className="btn-secondary" onClick={() => setShowEmployees(!showEmployees)}>
+          {showEmployees ? 'Hide Employees' : 'Manage Employees'}
+        </button>
         <button className="btn-secondary" onClick={() => setShowCalendar(!showCalendar)}>
           {showCalendar ? 'Show Table' : 'Show Calendar'}
         </button>
@@ -206,6 +242,37 @@ function Admin() {
           Reset Demo Data
         </button>
       </div>
+
+      {showEmployees && (
+        <div className="employee-management">
+          <h2>Manage Employees</h2>
+          <div className="add-employee">
+            <input
+              type="text"
+              value={newEmployeeName}
+              onChange={e => setNewEmployeeName(e.target.value)}
+              placeholder="Employee name"
+              onKeyDown={e => e.key === 'Enter' && handleAddEmployee()}
+            />
+            <button className="btn-primary" onClick={handleAddEmployee}>
+              Add
+            </button>
+          </div>
+          <div className="employee-list">
+            {employees.map(emp => (
+              <div key={emp.id} className="employee-item">
+                <span>{emp.name}</span>
+                <button
+                  className="btn-danger btn-small"
+                  onClick={() => handleDeleteEmployee(emp.id)}
+                >
+                  Delete
+                </button>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
 
       {!showCalendar ? (
         <div className="summary-table">

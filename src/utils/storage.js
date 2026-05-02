@@ -1,4 +1,5 @@
 const STORAGE_KEY = 'timesheet-app-data'
+const THEME_KEY = 'timesheet-app-theme'
 
 const defaultData = {
   employees: [
@@ -47,14 +48,45 @@ export function getActiveEntry(employeeId) {
   )
 }
 
+export function addEmployee(name) {
+  const data = getAppData()
+  const newEmployee = {
+    id: generateId(),
+    name: name.trim(),
+  }
+  data.employees.push(newEmployee)
+  saveAppData(data)
+  return newEmployee
+}
+
+export function deleteEmployee(id) {
+  const data = getAppData()
+  data.employees = data.employees.filter(e => e.id !== id)
+  saveAppData(data)
+}
+
 export function generateId() {
-  return Date.now().toString(36) + Math.random().toString(36).substr(2)
+  return Date.now().toString(36) + Math.random().toString(36).substring(2)
 }
 
 export function resetToDemoData() {
   const data = getAppData()
   data.timeEntries = generateDemoData()
   saveAppData(data)
+}
+
+export function getTheme() {
+  return localStorage.getItem(THEME_KEY) || 'light'
+}
+
+export function setTheme(theme) {
+  localStorage.setItem(THEME_KEY, theme)
+  document.documentElement.setAttribute('data-theme', theme)
+}
+
+export function initializeTheme() {
+  const theme = getTheme()
+  document.documentElement.setAttribute('data-theme', theme)
 }
 
 function generateDemoData() {
